@@ -10,6 +10,7 @@ import {
 import { orderedLists } from './domain/lists';
 import { useTodoStore, type ListResult, type SaveResult } from './state/useTodoStore';
 import { useToday } from './hooks/useToday';
+import { useTheme } from './hooks/useTheme';
 import { Sidebar } from './components/Sidebar';
 import { Toolbar } from './components/Toolbar';
 import { TaskList } from './components/TaskList';
@@ -44,6 +45,7 @@ const VIEW_TITLES: Record<Exclude<ViewKey, 'list'>, string> = {
 export default function App() {
   const store = useTodoStore();
   const today = useToday();
+  const [theme, setTheme] = useTheme();
   const data = store.data;
   const tasks = data?.tasks ?? [];
 
@@ -330,6 +332,8 @@ export default function App() {
         lists={data.lists}
         counts={counts}
         selection={selection}
+        theme={theme}
+        onThemeChange={setTheme}
         mobileOpen={mobileNavOpen}
         onCloseMobile={() => setMobileNavOpen(false)}
         onSelectPrimary={selectPrimary}

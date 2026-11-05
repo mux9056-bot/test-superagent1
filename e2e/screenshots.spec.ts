@@ -51,6 +51,29 @@ test('capture desktop and mobile product states', async ({ page }) => {
   await expect(page.getByText('整理本周会议纪要')).toBeVisible();
   await page.waitForTimeout(250);
   await page.screenshot({ path: 'docs/screenshots/after-desktop-today.png' });
+  await page.screenshot({ path: 'docs/screenshots/after-theme-desktop-light.png' });
+
+  const sidebar = page.getByRole('complementary', { name: '任务导航' });
+  for (const [label, file] of [
+    ['深色', 'dark'],
+    ['暖光', 'warm'],
+    ['高对比', 'contrast'],
+  ] as const) {
+    await sidebar.getByRole('radio', { name: label }).check();
+    await page.waitForTimeout(200);
+    await page.screenshot({ path: `docs/screenshots/after-theme-desktop-${file}.png` });
+  }
+  await sidebar.getByRole('radio', { name: '深色' }).check();
+  await page.waitForTimeout(200);
+  await page.getByRole('button', { name: '完成产品需求评审', exact: true }).click();
+  const darkDetail = page.getByRole('dialog', { name: '编辑任务' });
+  await expect(darkDetail).toBeVisible();
+  await page.waitForTimeout(250);
+  await page.screenshot({ path: 'docs/screenshots/after-theme-desktop-dark-detail.png' });
+  await darkDetail.getByRole('button', { name: '取消' }).click();
+
+  await sidebar.getByRole('radio', { name: '浅色' }).check();
+  await page.waitForTimeout(200);
 
   await page.getByRole('button', { name: '完成产品需求评审', exact: true }).click();
   const detail = page.getByRole('dialog', { name: '编辑任务' });
@@ -75,6 +98,7 @@ test('capture desktop and mobile product states', async ({ page }) => {
   await expect(mobile.getByRole('complementary', { name: '任务导航' })).toBeVisible();
   await mobile.waitForTimeout(350);
   await mobile.screenshot({ path: 'docs/screenshots/after-mobile-nav.png' });
+  await mobile.screenshot({ path: 'docs/screenshots/after-theme-mobile-nav.png' });
   await mobile.getByRole('button', { name: '关闭导航' }).click();
 
   await mobile.getByRole('button', { name: '完成产品需求评审', exact: true }).click();

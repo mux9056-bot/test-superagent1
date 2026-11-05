@@ -3,7 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#f5f6f8" />
+    <script>
+      (function () {
+        try {
+          var theme = window.localStorage.getItem('todo-app.theme.v1');
+          var colors = {
+            light: '#f5f6f8',
+            dark: '#12161f',
+            warm: '#f3ead9',
+            contrast: '#000000',
+          };
+          if (!colors[theme]) return;
+          document.documentElement.dataset.theme = theme;
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute('content', colors[theme]);
+        } catch (error) {
+          // The app falls back to the default theme when storage is unavailable.
+        }
+      })();
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta
       name="description"

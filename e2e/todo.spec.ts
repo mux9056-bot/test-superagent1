@@ -533,6 +533,53 @@ test.describe('corrupt data', () => {
   });
 });
 
+test.describe('theme modes', () => {
+  test('switches between four themes and restores the choice after reload', async ({ page }) => {
+    await page.goto('/');
+    const sidebar = nav(page);
+    await expect(sidebar.getByRole('radio')).toHaveCount(4);
+    await expect(sidebar.getByRole('radio', { name: '浅色' })).toBeChecked();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+    await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(245, 246, 248)');
+
+    const themes = [
+      ['深色', 'dark', '#12161f', 'rgb(18, 22, 31)'],
+      ['暖光', 'warm', '#f3ead9', 'rgb(243, 234, 217)'],
+      ['高对比', 'contrast', '#000000', 'rgb(0, 0, 0)'],
+    ] as const;
+
+    for (const [label, id, themeColor, background] of themes) {
+      await sidebar.getByRole('radio', { name: label }).check();
+      await expect(page.locator('html')).toHaveAttribute('data-theme', id);
+      await expect(sidebar.getByRole('radio', { name: label })).toBeChecked();
+      await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute(
+        'content',
+        themeColor,
+      );
+      await expect(page.locator('body')).toHaveCSS('background-color', background);
+    }
+
+    await sidebar.getByRole('radio', { name: '深色' }).check();
+    await page.reload();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+    await expect(nav(page).getByRole('radio', { name: '深色' })).toBeChecked();
+    await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#12161f');
+
+    await nav(page).getByRole('radio', { name: '浅色' }).check();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+    await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#f5f6f8');
+  });
+
+  test('falls back to the light theme when the stored value is unknown', async ({ page }) => {
+    await page.addInitScript(() => {
+      window.localStorage.setItem('todo-app.theme.v1', 'neon');
+    });
+    await page.goto('/');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+    await expect(nav(page).getByRole('radio', { name: '浅色' })).toBeChecked();
+  });
+});
+
 test.describe('responsive layout', () => {
   test.use({ viewport: { width: 360, height: 800 } });
 

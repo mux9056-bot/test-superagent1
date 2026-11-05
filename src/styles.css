@@ -12,6 +12,8 @@
   --accent: #2f6fed;
   --accent-hover: #1f5cd6;
   --accent-soft: #eaf1ff;
+  --primary: #15803d;
+  --primary-hover: #166534;
   --danger: #d92d20;
   --danger-soft: #fef3f2;
   --success: #087443;
@@ -828,14 +830,14 @@ a {
 }
 
 .button-primary {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--primary);
+  border-color: var(--primary);
   color: #fff;
 }
 
 .button-primary:hover {
-  background: var(--accent-hover);
-  border-color: var(--accent-hover);
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
 }
 
 .button-secondary {

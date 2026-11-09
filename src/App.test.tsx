@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import App from './App';
 import { STORAGE_KEY } from './storage/storage';
+import { THEME_STORAGE_KEY } from './theme';
 
 const user = userEvent.setup();
 
@@ -244,5 +245,38 @@ describe('persistence failures and corruption', () => {
     expect(saved.tasks).toEqual([]);
     expect(saved.lists).toHaveLength(1);
     expect(saved.lists[0].name).toBe('收集箱');
+  });
+});
+
+describe('theme modes', () => {
+  it('shows four theme options and defaults to the light theme', async () => {
+    await renderApp();
+    const nav = screen.getByRole('complementary', { name: '任务导航' });
+    const options = within(nav).getAllByRole('radio');
+
+    expect(options.map((option) => option.getAttribute('value'))).toEqual([
+      'light',
+      'dark',
+      'warm',
+      'contrast',
+    ]);
+    expect(within(nav).getByRole('radio', { name: '浅色' })).toBeChecked();
+    expect(document.documentElement.dataset.theme).toBe('light');
+  });
+
+  it('applies a selected theme and restores it after remounting', async () => {
+    const { unmount } = await renderApp();
+    const nav = screen.getByRole('complementary', { name: '任务导航' });
+
+    await user.click(within(nav).getByRole('radio', { name: '深色' }));
+    expect(document.documentElement.dataset.theme).toBe('dark');
+    expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe('dark');
+    expect(within(nav).getByRole('radio', { name: '深色' })).toBeChecked();
+
+    unmount();
+    await renderApp();
+    const restoredNav = screen.getByRole('complementary', { name: '任务导航' });
+    expect(document.documentElement.dataset.theme).toBe('dark');
+    expect(within(restoredNav).getByRole('radio', { name: '深色' })).toBeChecked();
   });
 });

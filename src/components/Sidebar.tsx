@@ -3,12 +3,16 @@ import type { NavCounts, ViewSelection } from '../domain/selectors';
 import type { TodoList, ViewKey } from '../domain/types';
 import { INBOX_ID } from '../domain/types';
 import { customLists, orderedLists } from '../domain/lists';
+import type { ThemeId } from '../theme';
 import { Icon, type IconName } from './Icon';
+import { ThemeSwitcher } from './ThemeSwitcher';
 
 interface SidebarProps {
   lists: TodoList[];
   counts: NavCounts;
   selection: ViewSelection;
+  theme: ThemeId;
+  onThemeChange: (theme: ThemeId) => void;
   mobileOpen: boolean;
   onCloseMobile: () => void;
   onSelectPrimary: (view: Exclude<ViewKey, 'list'>) => void;
@@ -30,6 +34,8 @@ export function Sidebar({
   lists,
   counts,
   selection,
+  theme,
+  onThemeChange,
   mobileOpen,
   onCloseMobile,
   onSelectPrimary,
@@ -231,6 +237,7 @@ export function Sidebar({
         </nav>
 
         <div className="sidebar-footer">
+          <ThemeSwitcher theme={theme} onChange={onThemeChange} />
           <button type="button" className="sidebar-footer-button" onClick={onOpenDataNotice}>
             <Icon name="info" size={17} />
             <span>

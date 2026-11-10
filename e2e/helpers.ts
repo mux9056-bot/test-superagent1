@@ -69,7 +69,7 @@ export async function seed(page: Page, data: AppData): Promise<void> {
 }
 
 export async function createTaskViaUi(page: Page, title: string): Promise<void> {
-  await page.getByRole('banner').getByRole('button', { name: /新增任务/ }).click();
+  await page.getByRole('banner').getByRole('button', { name: '添加' }).click();
   const dialog = page.getByRole('dialog', { name: '新增任务' });
   await dialog.getByLabel('标题').fill(title);
   await dialog.getByRole('button', { name: '保存', exact: true }).click();

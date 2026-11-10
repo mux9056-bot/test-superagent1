@@ -15,7 +15,7 @@ async function renderApp() {
 
 async function openCreate() {
   const toolbar = screen.getByRole('banner');
-  await user.click(within(toolbar).getByRole('button', { name: /新增任务/ }));
+  await user.click(within(toolbar).getByRole('button', { name: /添加/ }));
   return screen.findByRole('dialog', { name: '新增任务' });
 }
 

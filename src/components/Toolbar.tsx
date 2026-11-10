@@ -41,8 +41,8 @@ export function Toolbar({
         </div>
         <button type="button" className="button button-primary add-button" onClick={onAdd}>
           <Icon name="plus" size={18} />
-          <span className="add-label-long">新增任务</span>
-          <span className="add-label-short">新增</span>
+          <span className="add-label-long">添加</span>
+          <span className="add-label-short">添加</span>
         </button>
       </div>
 

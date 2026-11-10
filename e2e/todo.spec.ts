@@ -64,7 +64,7 @@ test.describe('core task flow', () => {
 
   test('submits on Enter in the title and keeps newlines in notes', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('banner').getByRole('button', { name: /新增任务/ }).click();
+    await page.getByRole('banner').getByRole('button', { name: '添加' }).click();
     const create = page.getByRole('dialog', { name: '新增任务' });
     await create.getByLabel('标题').fill('键盘任务');
     await create.getByLabel('标题').press('Enter');
@@ -297,7 +297,7 @@ test.describe('persistence failures', () => {
       };
     });
     await page.goto('/');
-    await page.getByRole('banner').getByRole('button', { name: /新增任务/ }).click();
+    await page.getByRole('banner').getByRole('button', { name: '添加' }).click();
     const dialog = page.getByRole('dialog', { name: '新增任务' });
     await dialog.getByLabel('标题').fill('无法保存的任务');
 
@@ -620,7 +620,7 @@ test.describe('responsive layout', () => {
     await expect(nav(page)).toBeHidden();
     await expect(page.getByText('未来 7 天暂无安排')).toBeVisible();
 
-    await page.getByRole('banner').getByRole('button', { name: /新增/ }).click();
+    await page.getByRole('banner').getByRole('button', { name: '添加' }).click();
     const dialog = page.getByRole('dialog', { name: '新增任务' });
     const box = await dialog.boundingBox();
     expect(box?.width).toBeGreaterThan(340);
@@ -648,7 +648,7 @@ test('desktop 1440x900 keeps the sidebar layout and add entry reachable', async 
   await expect(page.getByText('桌面任务')).toBeVisible();
   await expect(page.getByRole('button', { name: '打开导航菜单' })).toBeHidden();
   await expect(page.getByRole('complementary', { name: '任务导航' })).toBeVisible();
-  await expect(page.getByRole('banner').getByRole('button', { name: /新增任务/ })).toBeVisible();
+  await expect(page.getByRole('banner').getByRole('button', { name: '添加' })).toBeVisible();
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
